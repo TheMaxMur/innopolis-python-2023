@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: postgres:14.4-alpine
+    container_name: db
+    restart: "always"
+    volumes:
+      - psql_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASS:-postgres}
+      - POSTGRES_DB=${DB_NAME:-graphql}
+    ports:
+      - "5432:5432"
+
+  flask_app:
+    container_name: flask_app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: "always"
+    environment:
+      - HOST_DB=${DB_HOST:-db}
+      - PORT_DB=${DB_PORT:-5432}
+      - USER_DB=${DB_USER:-postgres}
+      - PASSWORD_DB=${DB_PASS:-postgres}
+      - NAME_DB=${DB_NAME:-graphql}
+    ports:
+      - "5000:5000"
+
+volumes:
+  psql_volume:

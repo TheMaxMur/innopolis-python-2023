@@ -1,0 +1,56 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Phone {
+    phone_id: ID!
+    name: String!
+    os: String!
+    cpu: String!
+    ram: Int!
+    disk: Int!
+}
+
+type PhoneResult {
+    success: Boolean!
+    errors: [String]
+    Phone: Phone
+}
+
+type PhonesResult {
+    success: Boolean!
+    errors: [String]
+    Phones: [Phone]
+}
+
+type DeleteResult {
+    success: Boolean!
+    message: String
+    errors: [String]
+}
+
+type UpdateResult {
+    success: Boolean!
+    errors: [String]
+    Phone: Phone
+}
+
+input PhoneInput {
+    name: String
+    os: String
+    cpu: String
+    ram: Int
+    disk: Int
+}
+
+type Query {
+    listPhones: PhonesResult!
+    getPhone(id: ID!): PhoneResult
+}
+
+type Mutation {
+    createPhone(name: String!, os: String!, cpu: String!, ram: Int!, disk: Int!): PhoneResult!
+    deletePhone(id: ID!): DeleteResult!
+    updatePhone(id: ID!, newPhoneData: PhoneInput!): UpdateResult!
+}
